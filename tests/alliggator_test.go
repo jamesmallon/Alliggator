@@ -34,10 +34,18 @@ var _ = Describe("Alliggator", func() {
 		})
 	})
 
-	Describe("Getting return from all.TreatDollarSign", func() {
+	Describe("Getting return from all.FromString", func() {
 		Context("Sending a json with mongodb aggregation format to get a json without dollar signs", func() {
 			It("should be the same json string, but without dollar signs", func() {
 				all.FromString(jsonString)
+			})
+		})
+	})
+
+	Describe("Getting return from all.CreateBsonObj", func() {
+		Context("Creating bson pipeline object to apply mongodb queries", func() {
+			It("should be a bson.M element", func() {
+				all.CreateBsonObj()
 			})
 		})
 	})
