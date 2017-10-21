@@ -10,8 +10,12 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# Backup files and folders
+*.bkp
+
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 vendor/
 database/
 main/
+dump/

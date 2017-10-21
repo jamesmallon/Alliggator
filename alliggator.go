@@ -5,8 +5,9 @@ import (
 	"bytes"
 	"encoding/json"
 	// mgo "gopkg.in/mgo.v2"
+	"fmt"
 	"gopkg.in/mgo.v2/bson"
-	"log"
+	// "log"
 	"reflect"
 	"regexp"
 )
@@ -29,48 +30,33 @@ func (all *alliggator) TreatDollarSign(jsonString string) string {
 	return jsonStream
 }
 
-// GetJsonField
-func (all *alliggator) GetJsonField(agg models.Aggregation) {
-	val := reflect.ValueOf(agg)
-	for i := 0; i < val.Type().NumField(); i++ {
-		log.Println(val.Type().Field(i).Tag.Get("json"))
-	}
-}
-
-// GetBsonField
-func (all *alliggator) GetBsonField(agg models.Aggregation) {
-	val := reflect.ValueOf(agg)
-	for i := 0; i < val.Type().NumField(); i++ {
-		log.Println(val.Type().Field(i).Tag.Get("bson"))
-		log.Println(val.Type().Field(i))
-	}
-}
-
-// CreateBsonObj
-func (all *alliggator) CreateBsonObj() []bson.M {
-	query := []bson.M{}
-	query = append(query, bson.M{"$match": bson.M{"domain": "carrierexpress.com.br", "ipPort": "55.131.31.42:37020"}})
-	query = append(query, bson.M{"$project": bson.M{"_id": 1, "domain": 1, "ipPort": 1, "available": 1}})
-	return query
-}
-
 // BuildPipeline
 func (all *alliggator) ChargePipeline(result []models.Aggregation) []bson.M {
 	query := []bson.M{}
+
 	for _, v := range result {
-		// all.GetJsonField(v)
-		// all.GetBsonField(v)
 		val := reflect.ValueOf(v)
 		for i := 0; i < val.Type().NumField(); i++ {
-			log.Println(val.Type().Field(i).Tag.Get("bson"))
-			// log.Println(val.Type().Field(i))
+			fieldName := val.Type().Field(i).Tag.Get("json")
+			fieldValue := val.Field(i)
+
+			if fieldValue.Type().String() == "interface {}" && reflect.ValueOf(fieldValue.Interface()).Kind().String() != "invalid" {
+				// log.Println(fieldName,": ", fieldValue.Interface())
+				query = append(query, bson.M{fmt.Sprintf("%s%s", "$", fieldName): fieldValue.Interface()})
+			} else if fieldValue.Type().String() == "int" && fieldValue.Int() > 0 {
+				// log.Println(fieldName,": ", fieldValue.Int())
+				query = append(query, bson.M{fmt.Sprintf("%s%s", "$", fieldName): fieldValue.Int()})
+			} else if fieldValue.Type().String() == "string" && len(fieldValue.String()) > 0 {
+				// log.Println(fieldName, ": ", fieldValue.String())
+				query = append(query, bson.M{fmt.Sprintf("%s%s", "$", fieldName): fieldValue.String()})
+			}
 		}
 	}
 	return query
 }
 
 // FromString
-func (all *alliggator) FromString(jsonString string) {
+func (all *alliggator) FromString(jsonString string) []bson.M {
 	jsonStream := all.TreatDollarSign(jsonString)
 	result := make([]models.Aggregation, 0)
 	decoder := json.NewDecoder(bytes.NewBufferString(jsonStream))
@@ -78,5 +64,5 @@ func (all *alliggator) FromString(jsonString string) {
 	if err != nil {
 		panic(err)
 	}
-	all.ChargePipeline(result)
+	return all.ChargePipeline(result)
 }

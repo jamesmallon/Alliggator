@@ -15,7 +15,7 @@ var _ = Describe("Alliggator", func() {
 
 	BeforeEach(func() {
 		all = alliggator.New()
-		jsonString = `[{"$match":{"domain": "carrierexpress.com.br"}},{"$project": {"_id": 0,"domain": 1,"ipPort": 1}},{"$sort": {"ipPort": 1}},{"$limit": 17},{"$skip": 7}]`
+		jsonString = `[{"$match":{"domain": "carrierexpress.com.br","ipPort": "0.94.234.213:15133"}},{"$project": {"_id": 0,"domain": 1,"ipPort": 1}},{"$sort": {"ipPort": 1}},{"$limit": 27},{"$skip": 7}]`
 	})
 
 	Describe("Getting data type from alliggator obj (all)", func() {
