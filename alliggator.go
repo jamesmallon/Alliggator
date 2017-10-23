@@ -1,13 +1,11 @@
 package alliggator
 
 import (
-	"Alliggator/models"
+	"github.com/johnthegreenobrien/Alliggator/models"
 	"bytes"
 	"encoding/json"
-	// mgo "gopkg.in/mgo.v2"
 	"fmt"
 	"gopkg.in/mgo.v2/bson"
-	// "log"
 	"reflect"
 	"regexp"
 )
