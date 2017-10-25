@@ -11,17 +11,10 @@ import (
 )
 
 // alliggator
-type alliggator struct {
-	// Data bson.M `json:"data"`
-}
-
-// New
-func New() *alliggator {
-	return &alliggator{}
-}
+type Alliggator struct {}
 
 // TreatDollarSign
-func (all *alliggator) TreatDollarSign(jsonString string) string {
+func TreatDollarSign(jsonString string) string {
 	var reg = regexp.MustCompile(`\$`)
 	jsonStream := reg.ReplaceAllString(string(jsonString), ``)
 	// log.Println(jsonStream)
@@ -29,7 +22,7 @@ func (all *alliggator) TreatDollarSign(jsonString string) string {
 }
 
 // BuildPipeline
-func (all *alliggator) ChargePipeline(result []models.Aggregation) []bson.M {
+func ChargePipeline(result []models.Aggregation) []bson.M {
 	query := []bson.M{}
 
 	for _, v := range result {
@@ -54,13 +47,13 @@ func (all *alliggator) ChargePipeline(result []models.Aggregation) []bson.M {
 }
 
 // FromString
-func (all *alliggator) FromString(jsonString string) []bson.M {
-	jsonStream := all.TreatDollarSign(jsonString)
+func FromString(jsonString string) []bson.M {
+	jsonStream := TreatDollarSign(jsonString)
 	result := make([]models.Aggregation, 0)
 	decoder := json.NewDecoder(bytes.NewBufferString(jsonStream))
 	err := decoder.Decode(&result)
 	if err != nil {
 		panic(err)
 	}
-	return all.ChargePipeline(result)
+	return ChargePipeline(result)
 }
