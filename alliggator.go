@@ -4,14 +4,23 @@ import (
 	"github.com/johnthegreenobrien/Alliggator/models"
 	"bytes"
 	"encoding/json"
+	// mgo "gopkg.in/mgo.v2"
 	"fmt"
 	"gopkg.in/mgo.v2/bson"
+	// "log"
 	"reflect"
 	"regexp"
 )
 
 // alliggator
-type Alliggator struct {}
+type alliggator struct {
+	// Data bson.M `json:"data"`
+}
+
+// New
+func New() *alliggator {
+	return &alliggator{}
+}
 
 // TreatDollarSign
 func TreatDollarSign(jsonString string) string {
@@ -47,7 +56,7 @@ func ChargePipeline(result []models.Aggregation) []bson.M {
 }
 
 // FromString
-func FromString(jsonString string) []bson.M {
+func Piperize(jsonString string) []bson.M {
 	jsonStream := TreatDollarSign(jsonString)
 	result := make([]models.Aggregation, 0)
 	decoder := json.NewDecoder(bytes.NewBufferString(jsonStream))
