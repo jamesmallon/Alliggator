@@ -1,9 +1,9 @@
 # Alliggator
 
-Do you want to use mongodb aggregate syntax on your rest requests? Now you can do it! Alliggator provides a string/bson.M convertion. There is no need to stablish a pattern to you json string requests, use the mongodb aggregate syntax and Alliggator will convert it to bson!
+Alliggator provides a string/bson.M convertion, to be used with the mongodb native driver for Golang. There is no need to stablish a pattern to you json string requests, use the consolidate mongodb aggregate syntax and Alliggator will convert your string it to mgo.bson.M!
 
 ```
-Install: go get https://github.com/johnthegreenobrien/Alliggator.git (we recommend use it with golang Dep package menager)
+Install: go get https://github.com/johnthegreenobrien/Alliggator.git (better use it with golang Dep package manager)
 ```
 
 ```go
