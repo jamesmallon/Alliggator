@@ -1,7 +1,7 @@
 package alliggator
 
 import (
-	"github.com/johnthegreenobrien/Alliggator/models"
+	"github.com/jamesmallon/Alliggator/models"
 	"bytes"
 	"encoding/json"
 	// mgo "gopkg.in/mgo.v2"
